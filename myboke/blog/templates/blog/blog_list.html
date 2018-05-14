@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-xs-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{% block blog_list_title %}博客(一共有{{ page_of_blogs.paginator.count }}篇博客){% endblock %}</div>
+                    <div class="panel-heading">{% block blog_list_title %}博客{% endblock %}</div>
                     <div class="panel-boby">
                         {% for blog in blogs %}
                         <div class="blog">
@@ -33,7 +33,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div>
+                <div class="paginator">
                       <ul class="pagination">
                         <li>
                             {% if page_of_blogs.has_previous %}{# 判断是在第一页#}
@@ -44,8 +44,17 @@
                                 <span aria-hidden="true">&laquo;</span>
                             {% endif %}
                          </li>
-                    {% for page_num in page_of_blogs.paginator.page_range %}    {# 循环页数 #}
-                          <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                    {% for page_num in page_range %}    {# 循环页数 #}
+                          {% if page_num == page_of_blogs.number %}
+                                <li class="active"><span>{{ page_num }}</span></li>
+                          {% else %}
+                                {% if page_num == '...'%}
+                                    <li><span>{{ page_num }}</span></li>
+                                {% else %}
+                                    <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                                {% endif %}
+                          {% endif %}
+
                     {% endfor %}
                         <li>
                             {% if page_of_blogs.has_next %} {# 判断是否有下一页 #}
@@ -57,6 +66,10 @@
                             {% endif %}
                         </li>
                       </ul>
+                    <p>
+                        共有{{ page_of_blogs.paginator.count }}篇博客
+                        当前第{{ page_of_blogs.number }}页 共{{ page_of_blogs.paginator.num_pages }}页
+                    </p>
                 </div>
             </div>
             <div class="hidden-xs col-sm-2">
