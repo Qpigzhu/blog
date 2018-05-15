@@ -17,7 +17,23 @@
                         <li><span class="glyphicon glyphicon-tag"></span><a href="{% url 'blogs_type' blog.type_name.pk %}">{{ blog.type_name }}</a></li>
                         <li><span class="glyphicon glyphicon-time"></span>{{ blog.created_time|date:"Y-m-d" }}</li>
                     </ul>
-                     <div class="blog-content">{{blog.content}}</div>
+                    <div class="blog-content">{{blog.content}}</div>
+                    <div class="blog-previous-next">
+                        <p>上一篇：
+                            {% if previous_blog %}
+                                <a href="{% url 'blog_datail' previous_blog.pk %}">{{previous_blog.title}}</a>
+                            {% else %}
+                                无
+                            {% endif %}
+                        </p>
+                        <p>下一篇：
+                            {% if next_blog %}
+                                <a href="{% url 'blog_datail' next_blog.pk %}">{{next_blog.title}}</a>
+                            {% else %}
+                                无
+                            {% endif %}
+                        </p>
+                    </div>
             </div>
         </div>
     </div>

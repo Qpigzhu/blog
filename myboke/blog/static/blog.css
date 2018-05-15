@@ -21,6 +21,9 @@ div.blog p.blog-info{
 div.paginator{
     text-align:center
 }
+div.blog-previous-next{
+    margin-top:2em;
+}
 
 ul.blog_info{
     list-style-type:none;
