@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response,get_object_or_404
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.db.models import Count
 from .models import Blog,BlogType
 # Create your views here.
 
@@ -31,14 +32,21 @@ def blog_public_basc(request,blogs_all_list):
     if page_range[-1] != paginator.num_pages:
         page_range.append(paginator.num_pages)
 
+    #获取日期归档对应的博客数量
+    blog_dates = Blog.objects.dates('created_time','month',order='DESC')
+    blog_date_dict = {}
+    for blog_date in blog_dates:
+        blog_count = Blog.objects.filter(created_time__year = blog_date.year,created_time__month = blog_date.month).count()
+        blog_date_dict[blog_date] = blog_count
+
+
     context = {}
     context['blogs'] = page_of_blogs.object_list
     context['page_of_blogs']  = page_of_blogs
     context['page_range'] = page_range
-    context['type_name'] = BlogType.objects.all()
-    context['blog_dates'] = Blog.objects.dates('created_time','month',order='DESC')
+    context['type_name'] = BlogType.objects.annotate(blog_count = Count('blog')) #获取分类博客数量 annotate是扩展查询
+    context['blog_dates'] = blog_date_dict
     return context
-
 
 
 def blog_list(request):
@@ -47,7 +55,6 @@ def blog_list(request):
     return render_to_response('blog/blog_list.html',context)
 
 def blogs_type(request,type_pk):
-
     blog_type = get_object_or_404(BlogType,pk = type_pk)
     blogs_all_list = Blog.objects.filter(type_name = blog_type)
     context = blog_public_basc(request,blogs_all_list)
