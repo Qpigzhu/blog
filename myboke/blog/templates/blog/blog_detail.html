@@ -17,7 +17,7 @@
                         <li><span class="glyphicon glyphicon-tag"></span><a href="{% url 'blogs_type' blog.type_name.pk %}">{{ blog.type_name }}</a></li>
                         <li><span class="glyphicon glyphicon-time"></span>{{ blog.created_time|date:"Y-m-d" }}</li>
                     </ul>
-                    <div class="blog-content">{{blog.content}}</div>
+                    <div class="blog-content">{{blog.content|safe}}</div>  {#safe过滤器安全的意思#}
                     <div class="blog-previous-next">
                         <p>上一篇：
                             {% if previous_blog %}

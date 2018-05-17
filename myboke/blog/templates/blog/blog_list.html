@@ -23,7 +23,7 @@
                                 <span class="glyphicon glyphicon-tag"></span><a href="{% url 'blogs_type' blog.type_name.pk %}">{{blog.type_name}}</a>
                                 <span class="glyphicon glyphicon-time"></span>{{blog.created_time|date:"Y-m-d"}}
                             </p>
-                            <p>{{ blog.content|truncatechars:200}}</p>
+                            <p>{{ blog.content|striptags|safe|truncatechars:200}}</p> {# striptags过滤器为了去掉html标签#}
                         </div>
                         {% empty%}
                             <div class="blog">
