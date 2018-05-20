@@ -9,4 +9,6 @@ class BlogTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title','type_name','author','created_time','last_update_time')
+    list_display = ('title','type_name','author','get_read_num','created_time','last_update_time')
+
+
