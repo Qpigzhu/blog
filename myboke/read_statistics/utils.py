@@ -21,7 +21,7 @@ def read_statistics_once_read(request,obj):
         readDetail,created = ReadDetail.objects.get_or_create(content_type=ct, object_id=obj.pk,date=date)
         readDetail.read_num += 1
         readDetail.save()
-        return key
+    return key
 
 def get_seven_read_day(content_type):
     today = timezone.now().date()

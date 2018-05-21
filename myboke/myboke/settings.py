@@ -133,3 +133,11 @@ CKEDITOR_UPLOAD_PATH = 'upload/'
 
 #自定义参数
 EACH_PAGE_BLOGS_NUMBER = 7 #每页的篇数
+
+#缓存数据配置
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
