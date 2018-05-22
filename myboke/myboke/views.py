@@ -1,11 +1,11 @@
 import datetime
 from django.utils import timezone
-from django.shortcuts import render_to_response
+from django.shortcuts import render,redirect
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db.models import Sum
+from django.contrib import auth
 from read_statistics.utils import get_seven_read_day,get_hot_blog_today,get_hot_blog_yesterday
-
 from blog.models import Blog
 
 
@@ -37,4 +37,14 @@ def home_datil(request):
     context['hot_blog_today'] = get_hot_blog_today(blog_content_type)
     context['hot_blog_yesterday'] = get_hot_blog_yesterday(blog_content_type)
     context['hot_blog_for_7_days'] = get_7_hot_blogs_vlaue
-    return render_to_response('home.html',context)
+    return render(request,'home.html',context)
+
+def login(request):
+    username = request.POST.get('username','')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(request, username=username, password=password)
+    if user is not None:
+        auth.login(request, user)
+        return redirect('/')
+    else:
+        return render(request,'error.html',{'massage':'用户名或密码不正确'})

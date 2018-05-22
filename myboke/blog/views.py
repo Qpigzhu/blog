@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render_to_response,get_object_or_404,render
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Count
@@ -53,21 +53,21 @@ def blog_public_basc(request,blogs_all_list):
 def blog_list(request):
     blogs_all_list = Blog.objects.all()
     context = blog_public_basc(request,blogs_all_list)
-    return render_to_response('blog/blog_list.html',context)
+    return render(request,'blog/blog_list.html',context)
 
 def blogs_type(request,type_pk):
     blog_type = get_object_or_404(BlogType,pk = type_pk)
     blogs_all_list = Blog.objects.filter(type_name = blog_type)
     context = blog_public_basc(request,blogs_all_list)
     context['blog_type'] = blog_type
-    return render_to_response('blog/blogs_type.html',context)
+    return render(request,'blog/blogs_type.html',context)
 
 def blog_date(request,year,month):
     context = {}
     blogs_all_list = Blog.objects.filter(created_time__year = year,created_time__month = month)
     context = blog_public_basc(request, blogs_all_list)
     context['blog_with_date'] = '%s年%s月' %(year,month)
-    return render_to_response('blog/blog_date.html',context)
+    return render(request,'blog/blog_date.html',context)
 
 
 def blog_datail(request,blog_pk):
@@ -79,6 +79,6 @@ def blog_datail(request,blog_pk):
     context['blog'] = blog
     context['previous_blog'] = Blog.objects.filter(created_time__gt = blog.created_time).last() #获取上一篇
     context['next_blog'] = Blog.objects.filter(created_time__lt=blog.created_time).first()#获取下一篇
-    response =  render_to_response('blog/blog_detail.html',context) #响应
+    response =  render(request,'blog/blog_detail.html',context) #响应
     response.set_cookie(read_cookie_key,'true')    #写一个cookie判断阅读
     return response
