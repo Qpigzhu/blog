@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db.models import Sum
 from django.contrib import auth
+from django.urls import  reverse #反向解释页面
 from read_statistics.utils import get_seven_read_day,get_hot_blog_today,get_hot_blog_yesterday
 from blog.models import Blog
 
@@ -43,8 +44,9 @@ def login(request):
     username = request.POST.get('username','')
     password = request.POST.get('password', '')
     user = auth.authenticate(request, username=username, password=password)
+    referer = request.META.get('HTTP_REFERER',reverse('home'))    #获取请求头
     if user is not None:
         auth.login(request, user)
-        return redirect('/')
+        return redirect(referer)
     else:
         return render(request,'error.html',{'massage':'用户名或密码不正确'})

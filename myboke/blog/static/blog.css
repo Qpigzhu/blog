@@ -36,3 +36,10 @@ ul.blog_info li{
 div.blog-content{
     text-indent:2em;
 }
+div.comment-area{
+    margin-top:2em;
+}
+h3.comment-area-title{
+    border-bottom:1px solid #ccc;
+    padding-bottom:0.4em;
+}
