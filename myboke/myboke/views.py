@@ -8,6 +8,7 @@ from django.contrib import auth
 from django.urls import  reverse #反向解释页面
 from read_statistics.utils import get_seven_read_day,get_hot_blog_today,get_hot_blog_yesterday
 from blog.models import Blog
+from .forms import LoginForm
 
 
 def get_7_hot_blogs():
@@ -41,7 +42,7 @@ def home_datil(request):
     return render(request,'home.html',context)
 
 def login(request):
-    username = request.POST.get('username','')
+    '''username = request.POST.get('username','')
     password = request.POST.get('password', '')
     user = auth.authenticate(request, username=username, password=password)
     referer = request.META.get('HTTP_REFERER',reverse('home'))    #获取请求头
@@ -49,4 +50,21 @@ def login(request):
         auth.login(request, user)
         return redirect(referer)
     else:
-        return render(request,'error.html',{'massage':'用户名或密码不正确'})
+        return render(request,'error.html',{'massage':'用户名或密码不正确'})'''
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        #数据验证通过
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            user = auth.authenticate(request, username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return redirect(request.GET.get('from',reverse('home')))
+            else:
+                login_form.add_error(None,'用户名或密码不正确')
+    else:
+        login_form = LoginForm()
+    context = {}
+    context['login_form'] = login_form
+    return render(request,'login.html',context)
