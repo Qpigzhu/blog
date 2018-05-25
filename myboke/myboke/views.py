@@ -55,14 +55,9 @@ def login(request):
         login_form = LoginForm(request.POST)
         #数据验证通过
         if login_form.is_valid():
-            username = login_form.cleaned_data['username']
-            password = login_form.cleaned_data['password']
-            user = auth.authenticate(request, username=username, password=password)
-            if user is not None:
-                auth.login(request, user)
-                return redirect(request.GET.get('from',reverse('home')))
-            else:
-                login_form.add_error(None,'用户名或密码不正确')
+            user = login_form.cleaned_data['user']
+            auth.login(request, user)
+            return redirect(request.GET.get('from',reverse('home')))
     else:
         login_form = LoginForm()
     context = {}
