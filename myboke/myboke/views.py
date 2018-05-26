@@ -8,7 +8,8 @@ from django.contrib import auth
 from django.urls import  reverse #反向解释页面
 from read_statistics.utils import get_seven_read_day,get_hot_blog_today,get_hot_blog_yesterday
 from blog.models import Blog
-from .forms import LoginForm
+from .forms import LoginForm,RegForm
+from django.contrib.auth.models import User
 
 
 def get_7_hot_blogs():
@@ -63,3 +64,25 @@ def login(request):
     context = {}
     context['login_form'] = login_form
     return render(request,'login.html',context)
+
+
+def register(request):
+    if request.method == 'POST':
+        reg_form = RegForm(request.POST)
+        if reg_form.is_valid():
+            username = reg_form.cleaned_data['username']
+            email = reg_form.cleaned_data['email']
+            password = reg_form.cleaned_data['password']
+            # 创建用户
+            user = User.objects.create_user(username,email,password)
+            user.save()
+            #登录用户
+            user = auth.authenticate(username=username, password=password)
+            auth.login(request,user)
+            return redirect(request.GET.get('from', reverse('home')))
+    else:
+        reg_form = RegForm()
+
+    context = {}
+    context['reg_form'] = reg_form
+    return render(request,'register.html',context)
