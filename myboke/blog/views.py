@@ -6,6 +6,7 @@ from .models import Blog,BlogType
 from read_statistics.utils import read_statistics_once_read
 from django.contrib.contenttypes.models import ContentType
 from  comment.models import Comment
+from comment.forms import CommentForm
 # Create your views here.
 
 def blog_public_basc(request,blogs_all_list):
@@ -83,6 +84,7 @@ def blog_datail(request,blog_pk):
     context['next_blog'] = Blog.objects.filter(created_time__lt=blog.created_time).first()#获取下一篇
     context['blog'] = blog
     context['comments'] = comments
+    context['comments_form'] =CommentForm(initial={'content_type':blog_content_type.model,'object_id':blog_pk})
     response =  render(request,'blog/blog_detail.html',context) #响应
     response.set_cookie(read_cookie_key,'true')    #写一个cookie判断阅读
     return response

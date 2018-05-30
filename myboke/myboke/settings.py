@@ -131,7 +131,27 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/' #放在django项目根目录，同时也需要创建media文件夹
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+#配置ckeditor
 CKEDITOR_UPLOAD_PATH = 'upload/'
+#配置ckeditor评论面板
+CKEDITOR_CONFIGS = {
+    'comment_ckeditor': {
+        'toolbar': 'custom',
+        'toolbar_custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ["TextColor", "BGColor", 'RemoveFormat'],
+            ['NumberedList', 'BulletedList'],
+            ['Link', 'Unlink'],
+            ["Smiley", "SpecialChar", 'Blockquote'],
+        ],
+        'width': 'auto',
+        'height': '180',
+        'tabSpaces': 4,
+        'removePlugins': 'elementspath',
+        'resize_enabled': False,
+    }
+}
 
 #自定义参数
 EACH_PAGE_BLOGS_NUMBER = 7 #每页的篇数
