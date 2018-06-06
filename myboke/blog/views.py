@@ -5,7 +5,7 @@ from django.db.models import Count
 from .models import Blog,BlogType
 from read_statistics.utils import read_statistics_once_read
 from django.contrib.contenttypes.models import ContentType
-from  comment.models import Comment
+from comment.models import Comment
 from comment.forms import CommentForm
 # Create your views here.
 
@@ -77,14 +77,14 @@ def blog_datail(request,blog_pk):
     blog = get_object_or_404(Blog,pk = blog_pk)
     read_cookie_key = read_statistics_once_read(request,blog)
     blog_content_type = ContentType.objects.get_for_model(blog)
-    comments = Comment.objects.filter(content_type=blog_content_type,object_id=blog.pk)
+    comments = Comment.objects.filter(content_type=blog_content_type,object_id=blog.pk,parent=None)
 
     context = {}
     context['previous_blog'] = Blog.objects.filter(created_time__gt = blog.created_time).last() #获取上一篇
     context['next_blog'] = Blog.objects.filter(created_time__lt=blog.created_time).first()#获取下一篇
     context['blog'] = blog
-    context['comments'] = comments
-    context['comments_form'] =CommentForm(initial={'content_type':blog_content_type.model,'object_id':blog_pk})
+    context['comments'] = comments.order_by('-comment_time')
+    context['comment_count'] = Comment.objects.filter(content_type=blog_content_type,object_id=blog.pk).count()
     response =  render(request,'blog/blog_detail.html',context) #响应
     response.set_cookie(read_cookie_key,'true')    #写一个cookie判断阅读
     return response
