@@ -21,3 +21,10 @@ def get_comment_form(obj):
 	blog_content_type = ContentType.objects.get_for_model(obj)
 	form = CommentForm(initial={'content_type':blog_content_type.model,'object_id':obj.pk,'reply_comment_id':0})
 	return form
+
+
+@register.simple_tag
+def get_comment_list(obj):
+	blog_content_type = ContentType.objects.get_for_model(obj)
+	comments = Comment.objects.filter(content_type=blog_content_type,object_id=obj.pk,parent=None)
+	return comments.order_by('-comment_time')
