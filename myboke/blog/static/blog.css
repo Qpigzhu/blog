@@ -35,6 +35,7 @@ ul.blog_info li{
 }
 div.blog-content{
     text-indent:2em;
+    margin-bottom: 2em;
 }
 div.comment-area{
     margin-top:2em;
@@ -64,4 +65,13 @@ div#reply_cotent_container {
 p#reply_comment_title{
     border-bottom: 1px dashed #ccc;
     padding-bottom: 0.5em;
+}
+div.like{
+    color: #337ab7;
+    cursor: pointer;
+    display: inline-block;
+    padding:0.5em 0.3em;
+}
+div.like .active{
+    color: #f22;
 }
